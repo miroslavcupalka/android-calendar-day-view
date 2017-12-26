@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_event_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E4F5FF">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/rlEventHeader"
@@ -12,27 +11,28 @@
         android:orientation="horizontal"
         android:paddingBottom="0dp" />
 
-    <View
-        android:id="@+id/viewLeftMargin"
-        android:layout_width="4dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/rlEventHeader"
-        android:background="#009FF8"
-        android:layout_alignParentStart="true" />
-
     <RelativeLayout
         android:id="@+id/rlEventContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toRightOf="@+id/viewLeftMargin"
-        android:padding="4dp"
-        android:layout_toEndOf="@+id/viewLeftMargin">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlEventHeader"
+        android:background="#E4F5FF">
+
+        <View
+            android:id="@+id/viewLeftMargin"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="#009FF8" />
 
         <TextView
             android:id="@+id/item_event_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/viewLeftMargin"
+            android:layout_toRightOf="@+id/viewLeftMargin"
             android:text="Janie Warren
 0164326948
 Bangsar utama"
