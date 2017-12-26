@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         dayView = (CalendarDayView) findViewById(R.id.calendar);
-        dayView.setLimitTime(9, 22);
+        dayView.setLimitTime(7, 23);
 
         ((CdvDecorationDefault) (dayView.getDecoration())).setOnEventClickListener(
             new EventView.OnEventClickListener() {
