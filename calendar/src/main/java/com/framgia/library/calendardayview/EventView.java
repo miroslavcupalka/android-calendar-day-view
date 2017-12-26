@@ -21,13 +21,7 @@ public class EventView extends FrameLayout {
 
     protected OnEventClickListener mEventClickListener;
 
-    protected RelativeLayout mEventHeader;
-
-    protected LinearLayout mEventContent;
-
-    protected TextView mEventHeaderText1;
-
-    protected TextView mEventHeaderText2;
+    protected RelativeLayout rlEventHeader, rlEventContent;
 
     protected TextView mEventName;
 
@@ -49,7 +43,9 @@ public class EventView extends FrameLayout {
     protected void init(AttributeSet attrs) {
         LayoutInflater.from(getContext()).inflate(R.layout.view_event, this, true);
 
-        mEventName = (TextView) findViewById(R.id.item_event_name);
+        rlEventHeader = findViewById(R.id.rlEventHeader);
+        rlEventContent = findViewById(R.id.rlEventContent);
+        mEventName = findViewById(R.id.item_event_name);
 
         super.setOnClickListener(new OnClickListener() {
             @Override
@@ -69,9 +65,7 @@ public class EventView extends FrameLayout {
             }
         };
 
-        mEventHeaderText1.setOnClickListener(eventItemClickListener);
-        mEventHeaderText2.setOnClickListener(eventItemClickListener);
-        mEventContent.setOnClickListener(eventItemClickListener);
+        rlEventContent.setOnClickListener(eventItemClickListener);
     }
 
     public void setOnEventClickListener(OnEventClickListener listener){
@@ -86,15 +80,15 @@ public class EventView extends FrameLayout {
     public void setEvent(IEvent event) {
         this.mEvent = event;
         mEventName.setText(String.valueOf(event.getName()));
-        mEventContent.setBackgroundColor(event.getColor());
+        rlEventContent.setBackgroundColor(event.getColor());
     }
 
     public int getHeaderHeight() {
-        return mEventHeader.getMeasuredHeight();
+        return rlEventHeader.getMeasuredHeight();
     }
 
     public int getHeaderPadding() {
-        return mEventHeader.getPaddingBottom() + mEventHeader.getPaddingTop();
+        return rlEventHeader.getPaddingBottom() + rlEventHeader.getPaddingTop();
     }
 
     public void setPosition(Rect rect, int topMargin, int bottomMargin){
