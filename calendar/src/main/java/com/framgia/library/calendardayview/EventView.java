@@ -49,11 +49,7 @@ public class EventView extends FrameLayout {
     protected void init(AttributeSet attrs) {
         LayoutInflater.from(getContext()).inflate(R.layout.view_event, this, true);
 
-        mEventHeader = (RelativeLayout) findViewById(R.id.item_event_header);
-        mEventContent = (LinearLayout) findViewById(R.id.item_event_content);
         mEventName = (TextView) findViewById(R.id.item_event_name);
-        mEventHeaderText1 = (TextView) findViewById(R.id.item_event_header_text1);
-        mEventHeaderText2 = (TextView) findViewById(R.id.item_event_header_text2);
 
         super.setOnClickListener(new OnClickListener() {
             @Override
