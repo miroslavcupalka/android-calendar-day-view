@@ -8,11 +8,13 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
 import com.framgia.library.calendardayview.data.IEvent;
 import com.framgia.library.calendardayview.data.IPopup;
 import com.framgia.library.calendardayview.data.ITimeDuration;
 import com.framgia.library.calendardayview.decoration.CdvDecoration;
 import com.framgia.library.calendardayview.decoration.CdvDecorationDefault;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -76,10 +78,10 @@ public class CalendarDayView extends FrameLayout {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarDayView);
             try {
                 mEventMarginLeft =
-                    a.getDimensionPixelSize(R.styleable.CalendarDayView_eventMarginLeft,
-                        mEventMarginLeft);
+                        a.getDimensionPixelSize(R.styleable.CalendarDayView_eventMarginLeft,
+                                mEventMarginLeft);
                 mDayHeight =
-                    a.getDimensionPixelSize(R.styleable.CalendarDayView_dayHeight, mDayHeight);
+                        a.getDimensionPixelSize(R.styleable.CalendarDayView_dayHeight, mDayHeight);
                 mStartHour = a.getInt(R.styleable.CalendarDayView_startHour, mStartHour);
                 mEndHour = a.getInt(R.styleable.CalendarDayView_endHour, mEndHour);
             } finally {
@@ -122,7 +124,7 @@ public class CalendarDayView extends FrameLayout {
 
             // add event view
             EventView eventView =
-                getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight);
+                    getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight);
             if (eventView != null) {
                 mLayoutEvent.addView(eventView, eventView.getLayoutParams());
             }
@@ -137,7 +139,7 @@ public class CalendarDayView extends FrameLayout {
 
             // add popup views
             PopupView view =
-                getDecoration().getPopupView(popup, rect, mTimeHeight, mSeparateHourHeight);
+                    getDecoration().getPopupView(popup, rect, mTimeHeight, mSeparateHourHeight);
             if (popup != null) {
                 mLayoutPopup.addView(view, view.getLayoutParams());
             }
