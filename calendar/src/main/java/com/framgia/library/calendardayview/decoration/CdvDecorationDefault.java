@@ -33,6 +33,9 @@ public class CdvDecorationDefault implements CdvDecoration {
         return eventView;
     }
 
+
+
+
     @Override
     public PopupView getPopupView(IPopup popup, Rect eventBound, int hourHeight, int seperateH) {
         PopupView view = new PopupView(mContext);
