@@ -186,6 +186,8 @@ public class CalendarDayView extends FrameLayout {
         refresh();
     }
 
+    //test
+
     public CdvDecoration getDecoration() {
         return mDecoration;
     }
