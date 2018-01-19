@@ -43,6 +43,14 @@ public class CdvDecorationDefault implements CdvDecoration {
     }
 
     @Override
+    public EventView getCurrentTimeIndicator(Rect eventBound, int hourHeight, int seperateHeightTime) {
+        EventView eventView = new EventView(mContext);
+        eventView.setPosition(eventBound, -hourHeight, hourHeight - seperateHeightTime * 2);
+        eventView.setOnEventClickListener(mEventClickListener);
+        return eventView;
+    }
+
+    @Override
     public DayView getDayView(int hour) {
         DayView dayView = new DayView(mContext);
         dayView.setText(String.format("%1$2s:00", hour));

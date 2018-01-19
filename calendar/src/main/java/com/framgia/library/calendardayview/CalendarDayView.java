@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -46,7 +47,13 @@ public class CalendarDayView extends FrameLayout {
 
     private List<? extends IEvent> mEvents;
 
+    private List<? extends IEvent> currentTimeEvents;
+
     private List<? extends IPopup> mPopups;
+
+    private int currentTimeIndicatorPosition;
+
+    private Calendar currentTime;
 
     public CalendarDayView(Context context) {
         super(context);
@@ -89,6 +96,7 @@ public class CalendarDayView extends FrameLayout {
 
         mEvents = new ArrayList<>();
         mPopups = new ArrayList<>();
+        currentTimeEvents = new ArrayList<>();
         mDecoration = new CdvDecorationDefault(getContext());
 
         refresh();
@@ -100,6 +108,7 @@ public class CalendarDayView extends FrameLayout {
         drawEvents();
 
         drawPopups();
+
     }
 
     private void drawDayViews() {
@@ -112,12 +121,26 @@ public class CalendarDayView extends FrameLayout {
         mHourWidth = (int) dayView.getHourTextWidth();
         mTimeHeight = (int) dayView.getHourTextHeight();
         mSeparateHourHeight = (int) dayView.getSeparateHeight();
+
+
     }
 
     private void drawEvents() {
         mLayoutEvent.removeAllViews();
+//        ArrayList<ITimeDuration> iTimeDurationList;
+//        iTimeDurationList = new ArrayList<>();
+//        for (IEvent event : mEvents) {
+//            iTimeDurationList.add(event);
+//        }
+//
+
+
+//        Log.d("EVENTS", "Size of currentTimeAray : " + currentTimeEvents.size());
+
+        drawCurrentTimeIndicator();
 
         for (IEvent event : mEvents) {
+        //Rect rect = getTimeBound(event, iTimeDurationList)
             Rect rect = getTimeBound(event);
 
             // add event view
@@ -144,13 +167,65 @@ public class CalendarDayView extends FrameLayout {
         }
     }
 
+    private void drawCurrentTimeIndicator() {
+
+        Log.d("EVENTS", "Size of currentTimeEvents : " + currentTimeEvents.size());
+        if (currentTimeEvents.size() == 1) {
+            Rect rect = getTimeBound(currentTimeEvents.get(0));
+
+            currentTimeIndicatorPosition = rect.top;
+
+            Log.d("CALENDARSCROLL", currentTimeIndicatorPosition + " in initialization");
+
+            rect.left = rect.left - 10;
+
+            EventView eventView =
+                    getDecoration().getEventView(currentTimeEvents.get(0), rect, mTimeHeight, mSeparateHourHeight);
+            if (eventView != null) {
+                mLayoutEvent.addView(eventView, eventView.getLayoutParams());
+            }
+        }
+
+    }
+
+
+    //width needs to be divided by size of event array
+    //private Rect getTimeBound(ITimeDuration event, ArrayList<ITimeDuration> iTimeDurationList)
     private Rect getTimeBound(ITimeDuration event) {
         Rect rect = new Rect();
-        rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight;
-        rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight;
-        rect.left = mHourWidth + mEventMarginLeft;
-        rect.right = getWidth();
-        return rect;
+//        if (event.equals(mEvents.get(0))) {
+            rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight;
+            rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight;
+            rect.left = mHourWidth + mEventMarginLeft;
+            rect.right = getWidth();
+            return rect;
+//        }
+//
+//        for (IEvent events : mEvents) {
+//            for (ITimeDuration timeEvents : iTimeDurationList) {
+//                if (event.getStartTime().get(Calendar.HOUR_OF_DAY) <= timeEvents.getEndTime().get(Calendar.HOUR_OF_DAY)
+//                        && timeEvents.getStartTime().get(Calendar.HOUR_OF_DAY)  <= event.getEndTime().get(Calendar.HOUR_OF_DAY)  ) {
+//
+//                    rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight;
+//                    rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight;
+//                    rect.left = mHourWidth + mEventMarginLeft;
+//                    rect.right = getWidth();
+//                    return rect;
+//
+//                }
+//            }
+//
+//
+//        }
+
+
+
+    }
+
+    public int scrollToCurrentTime() {
+        Log.d("CALENDARSCROLL", currentTimeIndicatorPosition + "");
+//        mLayoutDayView.scrollBy(0, currentTimeIndicatorPosition - 200);
+        return currentTimeIndicatorPosition -200;
     }
 
     private int getPositionOfTime(Calendar calendar) {
@@ -178,6 +253,15 @@ public class CalendarDayView extends FrameLayout {
         refresh();
     }
 
+    public void setCurrentTime(Calendar currentTime) {
+        this.currentTime = currentTime;
+        refresh();
+    }
+
+    public void setEventsCurrentTime(List<? extends IEvent> events) {
+        this.currentTimeEvents = events;
+        refresh();
+    }
     /**
      * @param decorator decoration for draw event, popup, time
      */
@@ -185,8 +269,6 @@ public class CalendarDayView extends FrameLayout {
         this.mDecoration = decorator;
         refresh();
     }
-
-    //test
 
     public CdvDecoration getDecoration() {
         return mDecoration;

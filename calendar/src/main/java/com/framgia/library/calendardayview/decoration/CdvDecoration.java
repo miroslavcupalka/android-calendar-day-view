@@ -16,5 +16,7 @@ public interface CdvDecoration {
 
     PopupView getPopupView(IPopup popup, Rect eventBound, int hourHeight, int seperateHeight);
 
+    EventView getCurrentTimeIndicator(Rect eventBound, int hourHeight, int seperateHeight);
+
     DayView getDayView(int hour);
 }
