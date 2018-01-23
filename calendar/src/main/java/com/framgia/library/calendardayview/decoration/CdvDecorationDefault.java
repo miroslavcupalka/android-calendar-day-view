@@ -17,6 +17,8 @@ public class CdvDecorationDefault implements CdvDecoration {
 
     protected EventView.OnEventClickListener mEventClickListener;
 
+    protected EventView.OnEventSwipeListener mEventSwipeListener;
+
     protected PopupView.OnEventPopupClickListener mPopupClickListener;
 
     public CdvDecorationDefault(Context context) {
@@ -30,6 +32,7 @@ public class CdvDecorationDefault implements CdvDecoration {
         eventView.setEvent(event);
         eventView.setPosition(eventBound, -hourHeight, hourHeight - separateHeight * 2);
         eventView.setOnEventClickListener(mEventClickListener);
+        eventView.setOnEventSwipeListener(mEventSwipeListener);
         return eventView;
     }
 
@@ -47,6 +50,7 @@ public class CdvDecorationDefault implements CdvDecoration {
         EventView eventView = new EventView(mContext);
         eventView.setPosition(eventBound, -hourHeight, hourHeight - seperateHeightTime * 2);
         eventView.setOnEventClickListener(mEventClickListener);
+        eventView.setOnEventSwipeListener(mEventSwipeListener);
         return eventView;
     }
 
@@ -59,6 +63,10 @@ public class CdvDecorationDefault implements CdvDecoration {
 
     public void setOnEventClickListener(EventView.OnEventClickListener listener) {
         this.mEventClickListener = listener;
+    }
+
+    public void setOnEventSwipeListener(EventView.OnEventSwipeListener listener) {
+        this.mEventSwipeListener = listener;
     }
 
     public void setOnPopupClickListener(PopupView.OnEventPopupClickListener listener) {
