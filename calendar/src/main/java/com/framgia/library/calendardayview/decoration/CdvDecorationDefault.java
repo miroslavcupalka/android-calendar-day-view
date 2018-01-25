@@ -2,11 +2,16 @@ package com.framgia.library.calendardayview.decoration;
 
 import android.content.Context;
 import android.graphics.Rect;
+
 import com.framgia.library.calendardayview.DayView;
 import com.framgia.library.calendardayview.EventView;
 import com.framgia.library.calendardayview.PopupView;
 import com.framgia.library.calendardayview.data.IEvent;
 import com.framgia.library.calendardayview.data.IPopup;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by FRAMGIA\pham.van.khac on 22/07/2016.
@@ -57,7 +62,7 @@ public class CdvDecorationDefault implements CdvDecoration {
     @Override
     public DayView getDayView(int hour) {
         DayView dayView = new DayView(mContext);
-        dayView.setText(String.format("%1$2s:00", hour));
+        dayView.setText(timeToFormattedTime(hour));
         return dayView;
     }
 
@@ -71,5 +76,18 @@ public class CdvDecorationDefault implements CdvDecoration {
 
     public void setOnPopupClickListener(PopupView.OnEventPopupClickListener listener) {
         this.mPopupClickListener = listener;
+    }
+
+    private String timeToFormattedTime (int hour) {
+        String _24HourTime = String.format("%1$2s:00", hour);
+        SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat _12HourSDF = new SimpleDateFormat("h a");
+        Date _24HourDt = null;
+        try {
+            _24HourDt = _24HourSDF.parse(_24HourTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return _12HourSDF.format(_24HourDt);
     }
 }
