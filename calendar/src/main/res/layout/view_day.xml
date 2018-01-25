@@ -22,6 +22,11 @@
             android:textColor="#5e5e5e"
             android:textSize="12sp" />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="64dp"
+            android:background="#f0f0f0" />
+
         <LinearLayout
             android:id="@+id/separate_hour"
             android:layout_width="match_parent"
