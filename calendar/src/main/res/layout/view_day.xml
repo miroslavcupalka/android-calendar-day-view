@@ -23,6 +23,7 @@
             android:textSize="12sp" />
 
         <View
+            android:id="@+id/vertical_separator"
             android:layout_width="1dp"
             android:layout_height="64dp"
             android:background="#f0f0f0" />

@@ -33,6 +33,8 @@ public class CalendarDayView extends FrameLayout {
 
     private int mSeparateHourHeight = 0;
 
+    private int mVerticalBorderHeight = 76;
+
     private int mStartHour = 0;
 
     private int mEndHour = 24;
@@ -181,9 +183,6 @@ public class CalendarDayView extends FrameLayout {
 
             EventView eventView =
                     getDecoration().getEventView(currentTimeEvents.get(0), rect, mTimeHeight, mSeparateHourHeight);
-            if (eventView != null) {
-                mLayoutEvent.addView(eventView, eventView.getLayoutParams());
-            }
         }
 
     }
@@ -194,8 +193,8 @@ public class CalendarDayView extends FrameLayout {
     private Rect getTimeBound(ITimeDuration event) {
         Rect rect = new Rect();
 //        if (event.equals(mEvents.get(0))) {
-            rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight;
-            rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight;
+            rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
+            rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
             rect.left = mHourWidth + mEventMarginLeft;
             rect.right = getWidth();
             return rect;
@@ -226,6 +225,10 @@ public class CalendarDayView extends FrameLayout {
         Log.d("CALENDARSCROLL", currentTimeIndicatorPosition + "");
 //        mLayoutDayView.scrollBy(0, currentTimeIndicatorPosition - 200);
         return currentTimeIndicatorPosition -200;
+    }
+
+    public int getCurrentTime(){
+        return currentTimeIndicatorPosition;
     }
 
     private int getPositionOfTime(Calendar calendar) {
@@ -268,6 +271,10 @@ public class CalendarDayView extends FrameLayout {
     public void setDecorator(@NonNull CdvDecoration decorator) {
         this.mDecoration = decorator;
         refresh();
+    }
+
+    public int getEventLeftMargin(){
+        return mEventMarginLeft + mHourWidth;
     }
 
     public CdvDecoration getDecoration() {
