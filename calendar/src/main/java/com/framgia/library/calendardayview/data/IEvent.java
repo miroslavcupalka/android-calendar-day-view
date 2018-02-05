@@ -9,6 +9,8 @@ public interface IEvent extends ITimeDuration {
 
     String getName();
 
+    int getID();
+
     int getServiceMatchId();
 
     int getRequestSessionId();
