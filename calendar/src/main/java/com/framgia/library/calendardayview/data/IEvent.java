@@ -11,9 +11,9 @@ public interface IEvent extends ITimeDuration {
 
     int getID();
 
-    int getServiceMatchId();
+    Integer getServiceMatchId();
 
-    int getRequestSessionId();
+    Integer getRequestSessionId();
 
     int getColor();
 }
