@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -154,6 +153,7 @@ public class EventView extends FrameLayout {
                 + bottomMargin
                 + getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
         params.leftMargin = rect.left;
+        params.rightMargin = rect.right;
         setLayoutParams(params);
     }
 
