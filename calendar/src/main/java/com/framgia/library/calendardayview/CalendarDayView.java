@@ -9,13 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
 import com.framgia.library.calendardayview.data.IEvent;
 import com.framgia.library.calendardayview.data.IPopup;
 import com.framgia.library.calendardayview.data.ITimeDuration;
 import com.framgia.library.calendardayview.decoration.CdvDecoration;
 import com.framgia.library.calendardayview.decoration.CdvDecorationDefault;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -43,8 +41,6 @@ public class CalendarDayView extends FrameLayout {
 
     private int numberOfColumns = 1;
 
-    private int eventWidth = 0;
-
     private LinearLayout mLayoutDayView;
 
     private FrameLayout mLayoutEvent;
@@ -58,8 +54,6 @@ public class CalendarDayView extends FrameLayout {
     private List<? extends IEvent> currentTimeEvents;
 
     private List<? extends IPopup> mPopups;
-
-    private ArrayList<Rect> rectArrayList = new ArrayList<Rect>();
 
     private int currentTimeIndicatorPosition;
 
@@ -148,7 +142,7 @@ public class CalendarDayView extends FrameLayout {
 
             // add event view
             EventView eventView =
-                getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight, eventWidth);
+                getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight);
             if (eventView != null) {
                 mLayoutEvent.addView(eventView, eventView.getLayoutParams());
             }
@@ -199,45 +193,17 @@ public class CalendarDayView extends FrameLayout {
     private Rect getTimeBoundEvent(ITimeDuration event) {
         Log.d("RECT1", numberOfColumns + " no of columns");
 
-        eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft))/numberOfColumns);
-
         Rect rect = new Rect();
         rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
         rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
         rect.left = mHourWidth + mEventMarginLeft;
         rect.right = (getWidth() - mHourWidth + mEventMarginLeft)/numberOfColumns;
 
-        if (rectArrayList.size() == 0) {
-            rectArrayList.add(rect);
-            return rect;
-        } else {
-            Rect modifiedRect = placingEvent(rect, rectArrayList);
-            Log.d("modified", modifiedRect + " modified rect");
-            rectArrayList.add(modifiedRect);
-            return modifiedRect;
-        }
+        Log.d("RECT1", getWidth() + " getWidth");
+        Log.d("RECT1", rect.right + " right");
 
-    }
-
-    public Rect placingEvent (Rect rect, ArrayList<Rect> rectArrayList) {
-        int moveCount = 0;
-        for (Rect currentRect : rectArrayList) {
-            //if moveCount equals the maximum 'moves' it should make, return rect.
-                if (moveCount == numberOfColumns - 1 ) {
-                    return rect;
-                }
-                if (rect.top < currentRect.bottom && currentRect.top < rect.bottom) {
-                    moveCount++;
-                    rect.left = rect.left + eventWidth;
-                    rect.right = rect.right + eventWidth;
-                }
-                else {
-                    return rect;
-                }
-            }
         return rect;
     }
-
 
     public int scrollToCurrentTime() {
         Log.d("CALENDARSCROLL", currentTimeIndicatorPosition + "");

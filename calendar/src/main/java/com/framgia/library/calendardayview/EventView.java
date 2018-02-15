@@ -141,9 +141,9 @@ public class EventView extends FrameLayout {
         return mEventHeader.getPaddingBottom() + mEventHeader.getPaddingTop();
     }
 
-    public void setPosition(Rect rect, int topMargin, int bottomMargin, int eventWidth){
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+    public void setPosition(Rect rect, int topMargin, int bottomMargin){
+        FrameLayout.LayoutParams params =
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = rect.top - getHeaderHeight() - getHeaderPadding() + topMargin
                 - getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
@@ -152,9 +152,8 @@ public class EventView extends FrameLayout {
                 + getHeaderPadding()
                 + bottomMargin
                 + getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
-        params.width = eventWidth;
         params.leftMargin = rect.left;
-//        params.rightMargin = rect.right;
+        params.rightMargin = rect.right;
         setLayoutParams(params);
     }
 

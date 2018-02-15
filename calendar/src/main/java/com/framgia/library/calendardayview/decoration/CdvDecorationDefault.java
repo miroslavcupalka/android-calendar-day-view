@@ -32,10 +32,10 @@ public class CdvDecorationDefault implements CdvDecoration {
 
     @Override
     public EventView getEventView(IEvent event, Rect eventBound, int hourHeight,
-            int separateHeight,int eventWidth) {
+            int separateHeight) {
         EventView eventView = new EventView(mContext);
         eventView.setEvent(event);
-        eventView.setPosition(eventBound, -hourHeight, hourHeight - separateHeight * 2, eventWidth);
+        eventView.setPosition(eventBound, -hourHeight, hourHeight - separateHeight * 2);
         eventView.setOnEventClickListener(mEventClickListener);
         eventView.setOnEventSwipeListener(mEventSwipeListener);
         return eventView;
@@ -51,9 +51,9 @@ public class CdvDecorationDefault implements CdvDecoration {
     }
 
     @Override
-    public EventView getCurrentTimeIndicator(Rect eventBound, int hourHeight, int seperateHeightTime, int eventWidth) {
+    public EventView getCurrentTimeIndicator(Rect eventBound, int hourHeight, int seperateHeightTime) {
         EventView eventView = new EventView(mContext);
-        eventView.setPosition(eventBound, -hourHeight, hourHeight - seperateHeightTime * 2, eventWidth);
+        eventView.setPosition(eventBound, -hourHeight, hourHeight - seperateHeightTime * 2);
         eventView.setOnEventClickListener(mEventClickListener);
         eventView.setOnEventSwipeListener(mEventSwipeListener);
         return eventView;
