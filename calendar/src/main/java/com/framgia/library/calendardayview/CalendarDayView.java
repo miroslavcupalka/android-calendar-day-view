@@ -39,8 +39,6 @@ public class CalendarDayView extends FrameLayout {
 
     private int mEndHour = 24;
 
-    private int numberOfColumns = 1;
-
     private LinearLayout mLayoutDayView;
 
     private FrameLayout mLayoutEvent;
@@ -131,14 +129,21 @@ public class CalendarDayView extends FrameLayout {
 
     private void drawEvents() {
         mLayoutEvent.removeAllViews();
+//        ArrayList<ITimeDuration> iTimeDurationList;
+//        iTimeDurationList = new ArrayList<>();
+//        for (IEvent event : mEvents) {
+//            iTimeDurationList.add(event);
+//        }
+//
+
+
+//        Log.d("EVENTS", "Size of currentTimeAray : " + currentTimeEvents.size());
 
         drawCurrentTimeIndicator();
 
         for (IEvent event : mEvents) {
         //Rect rect = getTimeBound(event, iTimeDurationList)
-            Rect rect = getTimeBoundEvent(event);
-
-            Log.d("RECT1", rect.flattenToString());
+            Rect rect = getTimeBound(event);
 
             // add event view
             EventView eventView =
@@ -176,33 +181,44 @@ public class CalendarDayView extends FrameLayout {
 
             rect.left = rect.left - 10;
 
+            EventView eventView =
+                    getDecoration().getEventView(currentTimeEvents.get(0), rect, mTimeHeight, mSeparateHourHeight);
         }
 
     }
 
 
+    //width needs to be divided by size of event array
+    //private Rect getTimeBound(ITimeDuration event, ArrayList<ITimeDuration> iTimeDurationList)
     private Rect getTimeBound(ITimeDuration event) {
         Rect rect = new Rect();
+//        if (event.equals(mEvents.get(0))) {
             rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
             rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
             rect.left = mHourWidth + mEventMarginLeft;
             rect.right = getWidth();
             return rect;
-    }
+//        }
+//
+//        for (IEvent events : mEvents) {
+//            for (ITimeDuration timeEvents : iTimeDurationList) {
+//                if (event.getStartTime().get(Calendar.HOUR_OF_DAY) <= timeEvents.getEndTime().get(Calendar.HOUR_OF_DAY)
+//                        && timeEvents.getStartTime().get(Calendar.HOUR_OF_DAY)  <= event.getEndTime().get(Calendar.HOUR_OF_DAY)  ) {
+//
+//                    rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight;
+//                    rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight;
+//                    rect.left = mHourWidth + mEventMarginLeft;
+//                    rect.right = getWidth();
+//                    return rect;
+//
+//                }
+//            }
+//
+//
+//        }
 
-    private Rect getTimeBoundEvent(ITimeDuration event) {
-        Log.d("RECT1", numberOfColumns + " no of columns");
 
-        Rect rect = new Rect();
-        rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
-        rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
-        rect.left = mHourWidth + mEventMarginLeft;
-        rect.right = (getWidth() - mHourWidth + mEventMarginLeft)/numberOfColumns;
 
-        Log.d("RECT1", getWidth() + " getWidth");
-        Log.d("RECT1", rect.right + " right");
-
-        return rect;
     }
 
     public int scrollToCurrentTime() {
@@ -219,11 +235,6 @@ public class CalendarDayView extends FrameLayout {
         int hour = calendar.get(Calendar.HOUR_OF_DAY) - mStartHour;
         int minute = calendar.get(Calendar.MINUTE);
         return hour * mDayHeight + minute * mDayHeight / 60;
-    }
-
-    public void setNumberOfColumns(int numberOfColumns) {
-        this.numberOfColumns = numberOfColumns;
-        refresh();
     }
 
     public void setEvents(List<? extends IEvent> events) {
