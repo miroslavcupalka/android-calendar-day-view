@@ -27,16 +27,21 @@ public class OnSwipeTouchListener implements OnTouchListener {
 
     private final class GestureListener extends SimpleOnGestureListener {
 
-        private static final int SWIPE_THRESHOLD_X = 25;
-        private static final int SWIPE_VELOCITY_THRESHOLD_X = 25;
+        private static final int SWIPE_THRESHOLD_X = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD_X = 100;
         private static final int SWIPE_THRESHOLD_Y = 100;
         private static final int SWIPE_VELOCITY_THRESHOLD_Y = 100;
 
-        @Override
-        public boolean onDown(MotionEvent e) {
-            onClicked();
-            return true;
 
+    @Override
+    public boolean onDown(MotionEvent e) {
+    return true;
+}
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            onClicked();
+            return super.onSingleTapUp(e);
         }
 
         @Override
@@ -45,10 +50,10 @@ public class OnSwipeTouchListener implements OnTouchListener {
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
-                Log.d("X-Direction",String.valueOf(diffX));
-                Log.d("Y-Direction",String.valueOf(diffY));
-                Log.d("X-Velocity",String.valueOf(velocityX));
-                Log.d("Y-Velocity",String.valueOf(velocityY));
+                Log.d("X-Direction2",String.valueOf(diffX));
+                Log.d("Y-Direction2",String.valueOf(diffY));
+                Log.d("X-Velocity2",String.valueOf(velocityX));
+                Log.d("Y-Velocity2",String.valueOf(velocityY));
 
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (Math.abs(diffX) > SWIPE_THRESHOLD_X && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD_X) {
@@ -74,6 +79,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
             return result;
         }
     }
+
 
 
     public void onSwipeRight() {
