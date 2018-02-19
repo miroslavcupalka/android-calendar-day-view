@@ -154,7 +154,11 @@ public class EventView extends FrameLayout {
                 + getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
         params.width = eventWidth;
         params.leftMargin = rect.left;
+<<<<<<< HEAD
 //        params.rightMargin = rect.right;
+=======
+        params.rightMargin = rect.right;
+>>>>>>> parent of fa956ce... Revert "setting width based of number of columns"
         setLayoutParams(params);
     }
 
