@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -142,9 +141,9 @@ public class EventView extends FrameLayout {
         return mEventHeader.getPaddingBottom() + mEventHeader.getPaddingTop();
     }
 
-    public void setPosition(Rect rect, int topMargin, int bottomMargin){
-        FrameLayout.LayoutParams params =
-                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+    public void setPosition(Rect rect, int topMargin, int bottomMargin, int eventWidth){
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = rect.top - getHeaderHeight() - getHeaderPadding() + topMargin
                 - getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
@@ -153,7 +152,9 @@ public class EventView extends FrameLayout {
                 + getHeaderPadding()
                 + bottomMargin
                 + getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
+        params.width = eventWidth;
         params.leftMargin = rect.left;
+//        params.rightMargin = rect.right;
         setLayoutParams(params);
     }
 

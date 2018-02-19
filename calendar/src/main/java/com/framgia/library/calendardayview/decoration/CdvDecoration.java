@@ -12,11 +12,11 @@ import com.framgia.library.calendardayview.data.IPopup;
  */
 public interface CdvDecoration {
 
-    EventView getEventView(IEvent event, Rect eventBound, int hourHeight, int seperateHeight);
+    EventView getEventView(IEvent event, Rect eventBound, int hourHeight, int seperateHeight, int eventWidth);
 
     PopupView getPopupView(IPopup popup, Rect eventBound, int hourHeight, int seperateHeight);
 
-    EventView getCurrentTimeIndicator(Rect eventBound, int hourHeight, int seperateHeight);
+    EventView getCurrentTimeIndicator(Rect eventBound, int hourHeight, int seperateHeight, int eventWidth);
 
     DayView getDayView(int hour);
 }
