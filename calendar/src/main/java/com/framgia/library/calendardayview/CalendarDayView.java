@@ -217,7 +217,6 @@ public class CalendarDayView extends FrameLayout {
             return modifiedRect;
         }
 
-        return rect;
     }
 
     public Rect placingEvent (Rect rect, ArrayList<Rect> rectArrayList) {
