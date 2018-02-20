@@ -141,8 +141,8 @@ public class CalendarDayView extends FrameLayout {
         drawCurrentTimeIndicator();
 
         for (IEvent event : mEvents) {
-        //Rect rect = getTimeBound(event, iTimeDurationList)
             Rect rect = getTimeBoundEvent(event);
+
 
             Log.d("RECT1", rect.flattenToString());
 
@@ -196,7 +196,7 @@ public class CalendarDayView extends FrameLayout {
             return rect;
     }
 
-    private Rect getTimeBoundEvent(ITimeDuration event) {
+    private Rect getTimeBoundEvent(IEvent event) {
         Log.d("RECT1", numberOfColumns + " no of columns");
 
         eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft))/numberOfColumns);
