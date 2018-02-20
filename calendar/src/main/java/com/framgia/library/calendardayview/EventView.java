@@ -142,8 +142,8 @@ public class EventView extends FrameLayout {
     }
 
     public void setPosition(Rect rect, int topMargin, int bottomMargin, int eventWidth){
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        FrameLayout.LayoutParams params =
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = rect.top - getHeaderHeight() - getHeaderPadding() + topMargin
                 - getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
