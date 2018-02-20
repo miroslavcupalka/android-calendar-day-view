@@ -152,6 +152,7 @@ public class CalendarDayView extends FrameLayout {
 //            IEvent newBorderEvent = event;
 //            newBorderEvent.setColorToBorderColor();
 
+
             Log.d("RECT1", rect.flattenToString());
 
             // add event view
