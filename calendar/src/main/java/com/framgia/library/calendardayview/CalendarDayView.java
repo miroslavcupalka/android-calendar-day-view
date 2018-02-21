@@ -45,6 +45,8 @@ public class CalendarDayView extends FrameLayout {
 
     private int eventWidth = 0;
 
+    private int borderWidth = 10;
+
     private LinearLayout mLayoutDayView;
 
     private FrameLayout mLayoutEvent;
@@ -60,6 +62,8 @@ public class CalendarDayView extends FrameLayout {
     private List<? extends IPopup> mPopups;
 
     private ArrayList<Rect> rectArrayList = new ArrayList<Rect>();
+
+    private ArrayList<Rect> borderArrayList = new ArrayList<Rect>();
 
     private int currentTimeIndicatorPosition;
 
@@ -119,6 +123,7 @@ public class CalendarDayView extends FrameLayout {
 
         drawPopups();
 
+        drawCurrentTimeIndicator();
     }
 
     private void drawDayViews() {
@@ -138,19 +143,25 @@ public class CalendarDayView extends FrameLayout {
     private void drawEvents() {
         mLayoutEvent.removeAllViews();
 
-        drawCurrentTimeIndicator();
+
 
         for (IEvent event : mEvents) {
             Rect rect = getTimeBoundEvent(event);
+//            Rect borderRect = getBorderRect(event);
 
+//            IEvent newBorderEvent = event;
+//            newBorderEvent.setColorToBorderColor();
 
             Log.d("RECT1", rect.flattenToString());
 
             // add event view
             EventView eventView =
                 getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight, eventWidth);
-            if (eventView != null) {
+//            EventView borderView =
+//                    getDecoration().getEventView(newBorderEvent, borderRect, mTimeHeight, mSeparateHourHeight, eventWidth);
+            if (eventView != null ) {
                 mLayoutEvent.addView(eventView, eventView.getLayoutParams());
+//                mLayoutEvent.addView(borderView, eventView.getLayoutParams());
             }
         }
     }
@@ -199,13 +210,13 @@ public class CalendarDayView extends FrameLayout {
     private Rect getTimeBoundEvent(IEvent event) {
         Log.d("RECT1", numberOfColumns + " no of columns");
 
-        eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft))/numberOfColumns);
+        eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft))/numberOfColumns) - borderWidth;
 
         Rect rect = new Rect();
         rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
         rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
-        rect.left = mHourWidth + mEventMarginLeft;
-        rect.right = (getWidth() - mHourWidth + mEventMarginLeft)/numberOfColumns;
+        rect.left = mHourWidth + mEventMarginLeft + borderWidth;
+        rect.right = ((getWidth() - mHourWidth + mEventMarginLeft)/numberOfColumns) + borderWidth;
 
         if (rectArrayList.size() == 0) {
             rectArrayList.add(rect);
@@ -214,6 +225,27 @@ public class CalendarDayView extends FrameLayout {
             Rect modifiedRect = placingEvent(rect, rectArrayList);
             Log.d("modified", modifiedRect + " modified rect");
             rectArrayList.add(modifiedRect);
+            return modifiedRect;
+        }
+
+    }
+
+    private Rect getBorderRect(IEvent event) {
+//        eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft))/numberOfColumns) - borderWidth;
+
+        Rect rect = new Rect();
+        rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
+        rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
+        rect.left = mHourWidth + mEventMarginLeft;
+        rect.right = mHourWidth + mEventMarginLeft + borderWidth;
+
+        if (borderArrayList.size() == 0) {
+            borderArrayList.add(rect);
+            return rect;
+        } else {
+            Rect modifiedRect = placingEvent(rect, borderArrayList);
+            Log.d("modified", modifiedRect + " modified rect");
+            borderArrayList.add(modifiedRect);
             return modifiedRect;
         }
 

@@ -16,4 +16,6 @@ public interface IEvent extends ITimeDuration {
     int getColor();
 
     int getBorderColor();
+
+    void setColorToBorderColor();
 }
