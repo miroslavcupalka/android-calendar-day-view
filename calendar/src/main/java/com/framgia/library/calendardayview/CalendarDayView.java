@@ -297,34 +297,62 @@ public class CalendarDayView extends FrameLayout {
         ArrayList<Rect> modifiedRectList = arrangedRectList;
         ArrayList<Rect> currentRectList = arrangedRectList;
 
+        int totalLeftMargin =  mHourWidth + mEventMarginLeft;
+
     for(int i = 0; i < currentRectList.size(); i++) {
-        int count = 0;
+        int maxExtension = 0;
+        int collisionCount = 0;
         for (int j = 0; j < modifiedRectList.size(); j++)
             {
-                if (currentRectList.get(i).top <= modifiedRectList.get(j).bottom && modifiedRectList.get(j).top <= currentRectList.get(i).bottom) {
-                    if ((currentRectList.get(i).left == mHourWidth + mEventMarginLeft && currentRectList.get(i).right == modifiedRectList.get(i).left)
-                            &&
-                            currentRectList.get(i).left == modifiedRectList.get(i).right && currentRectList.get(i).right == modifiedRectList.get(i).left) {
-                        if (currentRectList.get(i).right + eventWidth > getWidth()) {
-                            continue;
-                        }
-
-                        while (currentRectList.get(i).right + eventWidth < getWidth()) {
-                            currentRectList.get(i).right = currentRectList.get(i).right + eventWidth;
-                            Log.d("WIDTHUSE", "add width");
-                            count++;
-                        }
-
-
-
-                    }
+                //check if it is compared to the same rect
+                if (currentRectList.get(i).contains(modifiedRectList.get(j))) {
+                    Log.d("SAMERECT", "same rect");
+                    continue;
                 }
-            }
-        if (count == 0) {
-//            currentRectList.get(i).right = getWidth();
-            Log.d("WIDTHUSE", "max width");
 
-        }
+                //breaks loop when rect is not supposed to be extended
+                    if (currentRectList.get(i).left == totalLeftMargin && currentRectList.get(i).right == modifiedRectList.get(j).left
+//                            ||
+//                            currentRectList.get(i).top <= modifiedRectList.get(j).bottom && modifiedRectList.get(j).top <= currentRectList.get(i).bottom && currentRectList.get(i).right ==  modifiedRectList.get(i).left
+                            ||
+                            currentRectList.get(i).right + eventWidth > getWidth()
+                            ) {
+                        Log.d("SAMERECT", "break within condition");
+                        maxExtension = currentRectList.get(i).right;
+//                        break;
+                            }
+
+
+                    if (currentRectList.get(i).right >= modifiedRectList.get(j).left) {
+                        if (currentRectList.get(i).top <= modifiedRectList.get(j).bottom && modifiedRectList.get(j).top <= currentRectList.get(i).bottom) {
+                            if (currentRectList.get(i).right == modifiedRectList.get(j).left) {
+                                maxExtension = currentRectList.get(i).right;
+                                break;
+                            } else {
+                                maxExtension = getWidth();
+                            }
+                    } else {
+                        maxExtension = getWidth();
+                    }
+                } else {
+                        if (currentRectList.get(i).top <= modifiedRectList.get(j).bottom && modifiedRectList.get(j).top <= currentRectList.get(i).bottom) {
+                            maxExtension = modifiedRectList.get(j).left;
+                        } else {
+                            maxExtension = getWidth();
+                            break;
+                        }
+
+                }
+
+            }
+//            if (maxExtension > 0 && collisionCount == 0) {
+//                if (maxExtension == getWidth()) {
+//                    currentRectList.get(i).right = getWidth();
+//                } else {
+                    currentRectList.get(i).right = maxExtension;
+//                }
+//            }
+
 
     }
 
