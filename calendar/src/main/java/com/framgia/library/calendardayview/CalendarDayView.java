@@ -45,6 +45,8 @@ public class CalendarDayView extends FrameLayout {
 
     private int eventWidth = 0;
 
+    private int borderWidth = 10;
+
     private LinearLayout mLayoutDayView;
 
     private FrameLayout mLayoutEvent;
@@ -60,6 +62,8 @@ public class CalendarDayView extends FrameLayout {
     private List<? extends IPopup> mPopups;
 
     private ArrayList<Rect> rectArrayList = new ArrayList<Rect>();
+
+    private ArrayList<Rect> borderArrayList = new ArrayList<Rect>();
 
     private int currentTimeIndicatorPosition;
 
@@ -93,10 +97,10 @@ public class CalendarDayView extends FrameLayout {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarDayView);
             try {
                 mEventMarginLeft =
-                    a.getDimensionPixelSize(R.styleable.CalendarDayView_eventMarginLeft,
-                        mEventMarginLeft);
+                        a.getDimensionPixelSize(R.styleable.CalendarDayView_eventMarginLeft,
+                                mEventMarginLeft);
                 mDayHeight =
-                    a.getDimensionPixelSize(R.styleable.CalendarDayView_dayHeight, mDayHeight);
+                        a.getDimensionPixelSize(R.styleable.CalendarDayView_dayHeight, mDayHeight);
                 mStartHour = a.getInt(R.styleable.CalendarDayView_startHour, mStartHour);
                 mEndHour = a.getInt(R.styleable.CalendarDayView_endHour, mEndHour);
             } finally {
@@ -106,6 +110,7 @@ public class CalendarDayView extends FrameLayout {
 
         mEvents = new ArrayList<>();
         mPopups = new ArrayList<>();
+        rectArrayList = new ArrayList<>();
         currentTimeEvents = new ArrayList<>();
         mDecoration = new CdvDecorationDefault(getContext());
 
@@ -119,6 +124,7 @@ public class CalendarDayView extends FrameLayout {
 
         drawPopups();
 
+        drawCurrentTimeIndicator();
     }
 
     private void drawDayViews() {
@@ -137,20 +143,46 @@ public class CalendarDayView extends FrameLayout {
 
     private void drawEvents() {
         mLayoutEvent.removeAllViews();
-
-        drawCurrentTimeIndicator();
+        ArrayList<Rect> ToBeModifiedRectArrayList = new ArrayList<Rect>();
 
         for (IEvent event : mEvents) {
-        //Rect rect = getTimeBound(event, iTimeDurationList)
-            Rect rect = getTimeBoundEvent(event);
+            ToBeModifiedRectArrayList.add(getTimeBoundEvent(event));
+        }
 
-            Log.d("RECT1", rect.flattenToString());
+//            Rect borderRect = getBorderRect(event);
 
+//            IEvent newBorderEvent = event;
+//            newBorderEvent.setColorToBorderColor();
+
+        ArrayList<Rect> modifiedRectArrayList = new ArrayList<>();
+        modifiedRectArrayList = useAllWidth(ToBeModifiedRectArrayList);
             // add event view
+
+//        Log.d("SIZEARRAY", modifiedRectArrayList.size() + " size of array");
+//        Log.d("MODRECT", modifiedRectArrayList.toString());
+        Log.d("MODRECT","before mod : " + ToBeModifiedRectArrayList.toString());
+        Log.d("MODRECT", eventWidth + " eventWidth");
+
+        Log.d("FOREVENT", modifiedRectArrayList.toString());
+
+        for (int i = 0; i < ToBeModifiedRectArrayList.size(); i++) {
+            Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).left + " left");
+            Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).right + " right");
+
+            int dynamicEventWidth = modifiedRectArrayList.get(i).right - modifiedRectArrayList.get(i).left;
+
+//            EventView eventView =
+//                    getDecoration().getEventView(mEvents.get(i), ToBeModifiedRectArrayList.get(i), mTimeHeight, mSeparateHourHeight, eventWidth);
+
             EventView eventView =
-                getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight, eventWidth);
+                    getDecoration().getEventView(mEvents.get(i), modifiedRectArrayList.get(i), mTimeHeight, mSeparateHourHeight, dynamicEventWidth);
+
+            Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).right + " right");
+//            EventView borderView =
+//                    getDecoration().getEventView(newBorderEvent, borderRect, mTimeHeight, mSeparateHourHeight, eventWidth);
             if (eventView != null) {
                 mLayoutEvent.addView(eventView, eventView.getLayoutParams());
+//                mLayoutEvent.addView(borderView, eventView.getLayoutParams());
             }
         }
     }
@@ -163,7 +195,7 @@ public class CalendarDayView extends FrameLayout {
 
             // add popup views
             PopupView view =
-                getDecoration().getPopupView(popup, rect, mTimeHeight, mSeparateHourHeight);
+                    getDecoration().getPopupView(popup, rect, mTimeHeight, mSeparateHourHeight);
             if (popup != null) {
                 mLayoutPopup.addView(view, view.getLayoutParams());
             }
@@ -189,23 +221,27 @@ public class CalendarDayView extends FrameLayout {
 
     private Rect getTimeBound(ITimeDuration event) {
         Rect rect = new Rect();
-            rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
-            rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
-            rect.left = mHourWidth + mEventMarginLeft;
-            rect.right = getWidth();
-            return rect;
+        rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
+        rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
+        rect.left = mHourWidth + mEventMarginLeft;
+        rect.right = getWidth();
+        return rect;
     }
 
-    private Rect getTimeBoundEvent(ITimeDuration event) {
+    private Rect getTimeBoundEvent(IEvent event) {
         Log.d("RECT1", numberOfColumns + " no of columns");
 
-        eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft))/numberOfColumns);
+        eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft)) / numberOfColumns);
+
+        Log.d("modified", eventWidth + " event width");
 
         Rect rect = new Rect();
         rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
         rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
         rect.left = mHourWidth + mEventMarginLeft;
-        rect.right = (getWidth() - mHourWidth + mEventMarginLeft)/numberOfColumns;
+        rect.right = rect.left + eventWidth ;
+
+        Log.d("modified", rect + " OG rect");
 
         if (rectArrayList.size() == 0) {
             rectArrayList.add(rect);
@@ -219,23 +255,108 @@ public class CalendarDayView extends FrameLayout {
 
     }
 
-    public Rect placingEvent (Rect rect, ArrayList<Rect> rectArrayList) {
+    private Rect getBorderRect(IEvent event) {
+//        eventWidth = ((getWidth() - (mHourWidth + mEventMarginLeft))/numberOfColumns) - borderWidth;
+
+        Rect rect = new Rect();
+        rect.top = getPositionOfTime(event.getStartTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
+        rect.bottom = getPositionOfTime(event.getEndTime()) + mTimeHeight / 2 + mSeparateHourHeight + mVerticalBorderHeight;
+        rect.left = mHourWidth + mEventMarginLeft;
+        rect.right = mHourWidth + mEventMarginLeft + borderWidth;
+
+        if (borderArrayList.size() == 0) {
+            borderArrayList.add(rect);
+            return rect;
+        } else {
+            Rect modifiedRect = placingEvent(rect, borderArrayList);
+            Log.d("modified", modifiedRect + " modified rect");
+            borderArrayList.add(modifiedRect);
+            return modifiedRect;
+        }
+
+    }
+
+    public Rect placingEvent(Rect rect, ArrayList<Rect> rectArrayList) {
         int moveCount = 0;
         for (Rect currentRect : rectArrayList) {
             //if moveCount equals the maximum 'moves' it should make, return rect.
-                if (moveCount == numberOfColumns - 1 ) {
-                    return rect;
-                }
-                if (rect.top < currentRect.bottom && currentRect.top < rect.bottom) {
-                    moveCount++;
-                    rect.left = rect.left + eventWidth;
-                    rect.right = rect.right + eventWidth;
-                }
-                else {
-                    return rect;
-                }
+            if (moveCount == numberOfColumns - 1) {
+                return rect;
             }
+            if ((rect.left == currentRect.left && currentRect.right == rect.right) && (rect.top < currentRect.bottom && currentRect.top < rect.bottom)) {
+                moveCount++;
+                rect.left = rect.left + eventWidth;
+                rect.right = rect.right + eventWidth;
+            }
+        }
         return rect;
+    }
+
+    //condition to check if rect.right is overlapping with right limit
+    public ArrayList<Rect> useAllWidth(ArrayList<Rect> arrangedRectList) {
+        ArrayList<Rect> modifiedRectList = arrangedRectList;
+        ArrayList<Rect> currentRectList = arrangedRectList;
+
+        int totalLeftMargin =  mHourWidth + mEventMarginLeft;
+
+    for(int i = 0; i < currentRectList.size(); i++) {
+        int maxExtension = 0;
+        int collisionCount = 0;
+        for (int j = 0; j < modifiedRectList.size(); j++)
+            {
+                //check if it is compared to the same rect
+                if (currentRectList.get(i).contains(modifiedRectList.get(j))) {
+                    Log.d("SAMERECT", "same rect");
+                    continue;
+                }
+
+                //breaks loop when rect is not supposed to be extended
+                    if (currentRectList.get(i).left == totalLeftMargin && currentRectList.get(i).right == modifiedRectList.get(j).left
+//                            ||
+//                            currentRectList.get(i).top <= modifiedRectList.get(j).bottom && modifiedRectList.get(j).top <= currentRectList.get(i).bottom && currentRectList.get(i).right ==  modifiedRectList.get(i).left
+                            ||
+                            currentRectList.get(i).right + eventWidth > getWidth()
+                            ) {
+                        Log.d("SAMERECT", "break within condition");
+                        maxExtension = currentRectList.get(i).right;
+//                        break;
+                            }
+
+
+                    if (currentRectList.get(i).right >= modifiedRectList.get(j).left) {
+                        if (currentRectList.get(i).top <= modifiedRectList.get(j).bottom && modifiedRectList.get(j).top <= currentRectList.get(i).bottom) {
+                            if (currentRectList.get(i).right == modifiedRectList.get(j).left) {
+                                maxExtension = currentRectList.get(i).right;
+                                break;
+                            } else {
+                                maxExtension = getWidth();
+                            }
+                    } else {
+                        maxExtension = getWidth();
+                    }
+                } else {
+                        if (currentRectList.get(i).top <= modifiedRectList.get(j).bottom && modifiedRectList.get(j).top <= currentRectList.get(i).bottom) {
+                            maxExtension = modifiedRectList.get(j).left;
+                        } else {
+                            maxExtension = getWidth();
+                            break;
+                        }
+
+                }
+
+            }
+//            if (maxExtension > 0 && collisionCount == 0) {
+//                if (maxExtension == getWidth()) {
+//                    currentRectList.get(i).right = getWidth();
+//                } else {
+                    currentRectList.get(i).right = maxExtension;
+//                }
+//            }
+
+
+    }
+
+    return currentRectList;
     }
 
 
