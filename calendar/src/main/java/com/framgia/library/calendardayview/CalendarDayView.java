@@ -114,6 +114,8 @@ public class CalendarDayView extends FrameLayout {
         currentTimeEvents = new ArrayList<>();
         mDecoration = new CdvDecorationDefault(getContext());
 
+        Log.d("FOREVENT", "day view init");
+
         refresh();
     }
 
@@ -165,7 +167,9 @@ public class CalendarDayView extends FrameLayout {
 
         Log.d("FOREVENT", modifiedRectArrayList.toString());
 
-        for (int i = 0; i < ToBeModifiedRectArrayList.size(); i++) {
+        Log.d("FOREVENT", modifiedRectArrayList.size() + " size of modified array");
+
+        for (int i = 0; i < modifiedRectArrayList.size(); i++) {
             Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).left + " left");
             Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).right + " right");
 
@@ -294,6 +298,12 @@ public class CalendarDayView extends FrameLayout {
 
     //condition to check if rect.right is overlapping with right limit
     public ArrayList<Rect> useAllWidth(ArrayList<Rect> arrangedRectList) {
+
+        if (arrangedRectList.size() == 1 ) {
+            arrangedRectList.get(0).right = getWidth();
+            return arrangedRectList;
+        }
+
         ArrayList<Rect> modifiedRectList = arrangedRectList;
         ArrayList<Rect> currentRectList = arrangedRectList;
 
