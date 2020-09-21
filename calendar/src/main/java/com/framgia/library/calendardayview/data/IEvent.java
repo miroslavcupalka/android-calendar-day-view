@@ -7,15 +7,15 @@ public interface IEvent extends ITimeDuration {
 
     String getName();
 
-    int getID();
-
-    Integer getServiceMatchId();
-
-    Integer getRequestSessionId();
+//    int getID();
+//
+//    Integer getServiceMatchId();
+//
+//    Integer getRequestSessionId();
 
     int getColor();
 
-    int getBorderColor();
-
-    void setColorToBorderColor();
+//    int getBorderColor();
+//
+//    void setColorToBorderColor();
 }
