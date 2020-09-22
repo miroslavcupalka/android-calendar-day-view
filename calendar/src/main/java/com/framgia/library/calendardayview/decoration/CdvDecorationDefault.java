@@ -9,9 +9,11 @@ import com.framgia.library.calendardayview.PopupView;
 import com.framgia.library.calendardayview.data.IEvent;
 import com.framgia.library.calendardayview.data.IPopup;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by FRAMGIA\pham.van.khac on 22/07/2016.
@@ -32,10 +34,10 @@ public class CdvDecorationDefault implements CdvDecoration {
 
     @Override
     public EventView getEventView(IEvent event, Rect eventBound, int hourHeight,
-            int separateHeight,int eventWidth) {
+            int separateHeight) {
         EventView eventView = new EventView(mContext);
         eventView.setEvent(event);
-        eventView.setPosition(eventBound, -hourHeight, hourHeight - separateHeight * 2, eventWidth);
+        eventView.setPosition(eventBound, -hourHeight, hourHeight - separateHeight * 2);
         eventView.setOnEventClickListener(mEventClickListener);
         eventView.setOnEventSwipeListener(mEventSwipeListener);
         return eventView;
@@ -53,7 +55,7 @@ public class CdvDecorationDefault implements CdvDecoration {
     @Override
     public EventView getCurrentTimeIndicator(Rect eventBound, int hourHeight, int seperateHeightTime, int eventWidth) {
         EventView eventView = new EventView(mContext);
-        eventView.setPosition(eventBound, -hourHeight, hourHeight - seperateHeightTime * 2, eventWidth);
+        eventView.setPosition(eventBound, -hourHeight, hourHeight - seperateHeightTime * 2);
         eventView.setOnEventClickListener(mEventClickListener);
         eventView.setOnEventSwipeListener(mEventSwipeListener);
         return eventView;
@@ -80,14 +82,14 @@ public class CdvDecorationDefault implements CdvDecoration {
 
     private String timeToFormattedTime (int hour) {
         String _24HourTime = String.format("%1$2s:00", hour);
+        DateFormat timeFormat = new SimpleDateFormat(android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "jj:mm"), Locale.getDefault());
         SimpleDateFormat _24HourSDF = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat _12HourSDF = new SimpleDateFormat("h a");
         Date _24HourDt = null;
         try {
             _24HourDt = _24HourSDF.parse(_24HourTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return _12HourSDF.format(_24HourDt);
+        return timeFormat.format(_24HourDt);
     }
 }
