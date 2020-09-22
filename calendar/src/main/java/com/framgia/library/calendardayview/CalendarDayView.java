@@ -156,13 +156,15 @@ public class CalendarDayView extends FrameLayout {
         mLayoutEvent.removeAllViews();
 
         for (IEvent event : mEvents) {
-            Rect rect = getTimeBound(event);
+            if (event.getStartTime() != null && event.getEndTime() != null ) {
+                Rect rect = getTimeBound(event);
 
-            // add event view
-            EventView eventView =
-                    getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight);
-            if (eventView != null) {
-                mLayoutEvent.addView(eventView, eventView.getLayoutParams());
+                // add event view
+                EventView eventView =
+                        getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight);
+                if (eventView != null) {
+                    mLayoutEvent.addView(eventView, eventView.getLayoutParams());
+                }
             }
         }
     }
