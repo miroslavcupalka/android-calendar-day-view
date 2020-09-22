@@ -25,6 +25,8 @@ import java.util.List;
  */
 public class CalendarDayView extends FrameLayout {
 
+    private static final String TAG = CalendarDayView.class.getSimpleName();
+
     private int mDayHeight = 0;
 
     private int mEventMarginLeft = 0;
@@ -46,6 +48,10 @@ public class CalendarDayView extends FrameLayout {
     private int eventWidth = 0;
 
     private int borderWidth = 10;
+
+    private int mHourInterval = 1;
+
+    private boolean mVerticalSeparatorHourVisibility = true;
 
     private LinearLayout mLayoutDayView;
 
@@ -103,6 +109,8 @@ public class CalendarDayView extends FrameLayout {
                         a.getDimensionPixelSize(R.styleable.CalendarDayView_dayHeight, mDayHeight);
                 mStartHour = a.getInt(R.styleable.CalendarDayView_startHour, mStartHour);
                 mEndHour = a.getInt(R.styleable.CalendarDayView_endHour, mEndHour);
+                mHourInterval = a.getInt(R.styleable.CalendarDayView_hourInterval, mHourInterval);
+                mVerticalSeparatorHourVisibility = a.getBoolean(R.styleable.CalendarDayView_verticalSeparatorHourVisibility, mVerticalSeparatorHourVisibility);
             } finally {
                 a.recycle();
             }
@@ -132,8 +140,9 @@ public class CalendarDayView extends FrameLayout {
     private void drawDayViews() {
         mLayoutDayView.removeAllViews();
         DayView dayView = null;
-        for (int i = mStartHour; i <= mEndHour; i++) {
+        for (int i = mStartHour; i <= mEndHour; i = i + mHourInterval) {
             dayView = getDecoration().getDayView(i);
+            dayView.setVetricalSeparatorHourVisibility(mVerticalSeparatorHourVisibility);
             mLayoutDayView.addView(dayView);
         }
         mHourWidth = (int) dayView.getHourTextWidth();
@@ -145,48 +154,15 @@ public class CalendarDayView extends FrameLayout {
 
     private void drawEvents() {
         mLayoutEvent.removeAllViews();
-        ArrayList<Rect> ToBeModifiedRectArrayList = new ArrayList<Rect>();
 
         for (IEvent event : mEvents) {
-            ToBeModifiedRectArrayList.add(getTimeBoundEvent(event));
-        }
+            Rect rect = getTimeBound(event);
 
-//            Rect borderRect = getBorderRect(event);
-
-//            IEvent newBorderEvent = event;
-//            newBorderEvent.setColorToBorderColor();
-
-        ArrayList<Rect> modifiedRectArrayList = new ArrayList<>();
-        modifiedRectArrayList = useAllWidth(ToBeModifiedRectArrayList);
             // add event view
-
-//        Log.d("SIZEARRAY", modifiedRectArrayList.size() + " size of array");
-//        Log.d("MODRECT", modifiedRectArrayList.toString());
-        Log.d("MODRECT","before mod : " + ToBeModifiedRectArrayList.toString());
-        Log.d("MODRECT", eventWidth + " eventWidth");
-
-        Log.d("FOREVENT", modifiedRectArrayList.toString());
-
-        Log.d("FOREVENT", modifiedRectArrayList.size() + " size of modified array");
-
-        for (int i = 0; i < modifiedRectArrayList.size(); i++) {
-            Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).left + " left");
-            Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).right + " right");
-
-            int dynamicEventWidth = modifiedRectArrayList.get(i).right - modifiedRectArrayList.get(i).left;
-
-//            EventView eventView =
-//                    getDecoration().getEventView(mEvents.get(i), ToBeModifiedRectArrayList.get(i), mTimeHeight, mSeparateHourHeight, eventWidth);
-
             EventView eventView =
-                    getDecoration().getEventView(mEvents.get(i), modifiedRectArrayList.get(i), mTimeHeight, mSeparateHourHeight, dynamicEventWidth);
-
-            Log.d("MODRECT", "Rect " + i + " : " + ToBeModifiedRectArrayList.get(i).right + " right");
-//            EventView borderView =
-//                    getDecoration().getEventView(newBorderEvent, borderRect, mTimeHeight, mSeparateHourHeight, eventWidth);
+                    getDecoration().getEventView(event, rect, mTimeHeight, mSeparateHourHeight);
             if (eventView != null) {
                 mLayoutEvent.addView(eventView, eventView.getLayoutParams());
-//                mLayoutEvent.addView(borderView, eventView.getLayoutParams());
             }
         }
     }
@@ -383,7 +359,7 @@ public class CalendarDayView extends FrameLayout {
     private int getPositionOfTime(Calendar calendar) {
         int hour = calendar.get(Calendar.HOUR_OF_DAY) - mStartHour;
         int minute = calendar.get(Calendar.MINUTE);
-        return hour * mDayHeight + minute * mDayHeight / 60;
+        return (hour * mDayHeight + minute * mDayHeight / 60) / mHourInterval;
     }
 
     public void setNumberOfColumns(int numberOfColumns) {
@@ -399,6 +375,15 @@ public class CalendarDayView extends FrameLayout {
     public void setPopups(List<? extends IPopup> popups) {
         this.mPopups = popups;
         refresh();
+    }
+
+    public void setHourInterval(int hourInterval){
+        this.mHourInterval = hourInterval;
+        refresh();
+    }
+
+    public void setVerticalSeparatorHourVisibility(boolean visibility){
+        this.mVerticalSeparatorHourVisibility = visibility;
     }
 
     public void setLimitTime(int startHour, int endHour) {

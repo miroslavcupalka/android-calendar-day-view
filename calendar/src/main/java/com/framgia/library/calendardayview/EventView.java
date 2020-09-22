@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.framgia.library.calendardayview.data.IEvent;
 import com.framgia.library.calendardayview.helper.swipeListeners.OnSwipeTouchListener;
 
@@ -129,8 +131,14 @@ public class EventView extends FrameLayout {
 
     public void setEvent(IEvent event) {
         this.mEvent = event;
-        mEventName.setText(String.valueOf(event.getName()));
-        mEventContent.setBackgroundColor(event.getColor());
+        mEventName.setText(String.valueOf(event.getText()));
+        if (event.getTextColor() != 0)
+            mEventName.setTextColor(ContextCompat.getColor(getContext(), event.getTextColor()));
+        mEventContent.setBackground(ContextCompat.getDrawable(getContext(), event.getBackground()));
+    }
+
+    public void setEventNameTextColor(int textColor){
+        mEventName.setTextColor(textColor);
     }
 
     public int getHeaderHeight() {
@@ -141,9 +149,9 @@ public class EventView extends FrameLayout {
         return mEventHeader.getPaddingBottom() + mEventHeader.getPaddingTop();
     }
 
-    public void setPosition(Rect rect, int topMargin, int bottomMargin, int eventWidth){
+    public void setPosition(Rect rect, int topMargin, int bottomMargin){
         FrameLayout.LayoutParams params =
-                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
         params.topMargin = rect.top - getHeaderHeight() - getHeaderPadding() + topMargin
                 - getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
@@ -152,7 +160,6 @@ public class EventView extends FrameLayout {
                 + getHeaderPadding()
                 + bottomMargin
                 + getResources().getDimensionPixelSize(R.dimen.cdv_extra_dimen);
-        params.width = eventWidth;
         params.leftMargin = rect.left;
 
 //        params.rightMargin = rect.right;

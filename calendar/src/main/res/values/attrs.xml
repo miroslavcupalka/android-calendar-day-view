@@ -9,6 +9,8 @@
         <attr name="textHourSize" format="dimension"/>
         <attr name="startHour" format="integer"/>
         <attr name="endHour" format="integer"/>
+        <attr name="hourInterval" format="integer"/>
+        <attr name="verticalSeparatorHourVisibility" format="boolean"/>
     </declare-styleable>
 
 </resources>
