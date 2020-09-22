@@ -1,6 +1,7 @@
 package com.framgia.sample.calendardayview;
 
-import android.graphics.Bitmap;
+import androidx.annotation.DrawableRes;
+
 import com.framgia.library.calendardayview.data.IEvent;
 import java.util.Calendar;
 
@@ -14,20 +15,20 @@ public class Event implements IEvent {
     private Calendar mEndTime;
     private String mName;
     private String mLocation;
-    private int mColor;
+    private int mBackground;
 
     public Event() {
 
     }
 
     public Event(long mId, Calendar mStartTime, Calendar mEndTime, String mName, String mLocation,
-            int mColor) {
+            int mBackground) {
         this.mId = mId;
         this.mStartTime = mStartTime;
         this.mEndTime = mEndTime;
         this.mName = mName;
         this.mLocation = mLocation;
-        this.mColor = mColor;
+        this.mBackground = mBackground;
     }
 
     public long getId() {
@@ -54,8 +55,13 @@ public class Event implements IEvent {
         this.mEndTime = endTime;
     }
 
-    public String getName() {
+    public String getText() {
         return mName;
+    }
+
+    @Override
+    public int getTextColor() {
+        return android.R.color.black;
     }
 
     public void setName(String name) {
@@ -70,11 +76,11 @@ public class Event implements IEvent {
         this.mLocation = location;
     }
 
-    public int getColor() {
-        return mColor;
+    public int getBackground() {
+        return mBackground;
     }
 
-    public void setColor(int color) {
-        this.mColor = color;
+    public void setBackground(@DrawableRes int background) {
+        this.mBackground = background;
     }
 }

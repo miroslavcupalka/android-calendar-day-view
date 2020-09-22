@@ -1,7 +1,7 @@
 package com.framgia.sample.calendardayview;
 
 import android.os.Bundle;
-import androidx.core.content.ContextCompat;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
             new EventView.OnEventClickListener() {
                 @Override
                 public void onEventClick(EventView view, IEvent data) {
-                    Log.e("TAG", "onEventClick:" + data.getName());
+                    Log.e("TAG", "onEventClick:" + data.getText());
                 }
 
                 @Override
                 public void onEventViewClick(View view, EventView eventView, IEvent data) {
-                    Log.e("TAG", "onEventViewClick:" + data.getName());
+                    Log.e("TAG", "onEventViewClick:" + data.getText());
                     if (data instanceof Event) {
                         // change event (ex: set event color)
                         dayView.setEvents(events);
@@ -69,27 +69,27 @@ public class MainActivity extends AppCompatActivity {
         events = new ArrayList<>();
 
         {
-            int eventColor = ContextCompat.getColor(this, R.color.eventColor);
+            int background = R.drawable.shape_rectangle_rounded_blue;
             Calendar timeStart = Calendar.getInstance();
             timeStart.set(Calendar.HOUR_OF_DAY, 11);
             timeStart.set(Calendar.MINUTE, 0);
             Calendar timeEnd = (Calendar) timeStart.clone();
             timeEnd.set(Calendar.HOUR_OF_DAY, 15);
             timeEnd.set(Calendar.MINUTE, 30);
-            Event event = new Event(1, timeStart, timeEnd, "Event", "Hockaido", eventColor);
+            Event event = new Event(1, timeStart, timeEnd, "Event", "Hockaido", background);
 
             events.add(event);
         }
 
         {
-            int eventColor = ContextCompat.getColor(this, R.color.eventColor1);
+            int background = R.color.eventColor1;
             Calendar timeStart = Calendar.getInstance();
             timeStart.set(Calendar.HOUR_OF_DAY, 18);
             timeStart.set(Calendar.MINUTE, 0);
             Calendar timeEnd = (Calendar) timeStart.clone();
             timeEnd.set(Calendar.HOUR_OF_DAY, 20);
             timeEnd.set(Calendar.MINUTE, 30);
-            Event event = new Event(1, timeStart, timeEnd, "Another event", "Hockaido", eventColor);
+            Event event = new Event(1, timeStart, timeEnd, "Another event", "Hockaido", background);
 
             events.add(event);
         }
