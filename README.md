@@ -1,19 +1,13 @@
 # Calendar-Day-View
 Calendar Day View
 
-[![](https://jitpack.io/v/khacpv/Calendar-Day-View.svg)](https://jitpack.io/#khacpv/Calendar-Day-View)
+[![](https://jitpack.io/v/miroslavcupalka/android-calendar-day-view.svg)](https://jitpack.io/#miroslavcupalka/android-calendar-day-view)
 
 <a><img src="./image/screenshot.png" width="200"></a>
 
 ### install:
 
-**via Jcenter**
-
-````Gradle
-compile 'com.framgia.library.calendardayview:library:1.0.4'
-````
-
-**or via JitPack (to get current code)**
+**via JitPack (to get current code)**
 
 project/build.gradle
 ````gradle
@@ -25,7 +19,7 @@ allprojects {
 ````
 module/build.gradle
 ````gradle
-compile 'com.github.khacpv:Calendar-Day-View:master-SNAPSHOT'
+implementation 'com.github.miroslavcupalka:android-calendar-day-view:1.1.0'
 ````
 
 #### How to use:
@@ -45,7 +39,7 @@ compile 'com.github.khacpv:Calendar-Day-View:master-SNAPSHOT'
   </ScrollView>
 ````
 
-Create your model [Event.java](https://github.com/khacpv/Calendar-Day-View/blob/master/sample/src/main/java/com/framgia/sample/calendardayview/Event.java#L11) class by implement IEvent & IPopupEvent
+Create your model [Event.java](https://github.com/miroslavcupalka/android-calendar-day-view/blob/master/sample/src/main/java/com/framgia/sample/calendardayview/Event.java#L11) class by implement IEvent & IPopupEvent
 
 ````Java
 Event implements IEvent, IPopupEvent {
