@@ -1,8 +1,13 @@
 package com.framgia.library.calendardayview;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +43,8 @@ public class EventView extends FrameLayout {
     protected TextView mEventHeaderText2;
 
     protected TextView mEventName;
+
+    private float mEventTextHeight;
 
     public EventView(Context context) {
         super(context);
@@ -114,6 +121,8 @@ public class EventView extends FrameLayout {
         mEventContent.setOnClickListener(eventItemClickListener);
         //added swipelistener
         mEventContent.setOnTouchListener(eventSwipeTouchListener);
+
+        mEventTextHeight = getEventTextHeight();
     }
 
     public void setOnEventClickListener(OnEventClickListener listener){
@@ -175,5 +184,22 @@ public class EventView extends FrameLayout {
     public interface OnEventSwipeListener {
         void onEventViewSwipe(Boolean rightDirection, Boolean leftDirection);
         void onEventViewClicked(EventView view, IEvent data);
+    }
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        if ((heightSize - getHeaderHeight() - mEventTextHeight) <= 0) {
+            mEventName.setVisibility(INVISIBLE);
+        }else{
+            mEventName.setVisibility(VISIBLE);
+        }
+    }
+
+    private float getEventTextHeight() {
+        return (new StaticLayout(!TextUtils.isEmpty(mEventName.getText()) ? mEvent.getText() : "Event", mEventName.getPaint(), 150,
+                Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true)).getHeight();
     }
 }
